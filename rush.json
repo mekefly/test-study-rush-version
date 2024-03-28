@@ -218,18 +218,31 @@
      * a GitHub "fork" of the real repo, this setting will be different from the repository URL of your
      * your PR branch, and in this situation "rush change" will also automatically invoke "git fetch"
      * to retrieve the latest activity for the remote main branch.
+     *此 Git 存储库的 URL，由“rush Change”用来确定 PR 的基础分支。
+     *
+     *“rush Change”命令需要确定哪些文件受到 PR diff 的影响。
+     *如果您将主分支中的提交合并或精心挑选到 PR 分支中，那么这些提交
+     *应该被排除在这个差异之外（因为它们属于其他一些 PR）。为了做到这一点，
+     *Rush 需要知道在哪里可以找到你的 PR 的基础分支。该信息不能
+     *仅由 Git 确定，因为“拉取请求”功能不是 Git 概念。理想情况下
+     *Rush 将使用特定于供应商的协议从 GitHub、Azure DevOps 等查询信息。
+     *但为了简单起见，“仓促改变”只是假设你的 PR 反对“主”分支
+     *由 rush.json 中的repository.url 设置指示的 Git 远程。如果您工作于
+     *真实存储库的 GitHub“分叉”，此设置将与您的存储库 URL 不同
+     *你的 PR 分支，在这种情况下“rush Change”也会自动调用“git fetch”
+     *检索远程主分支的最新活动。
      */
-    // "url": "https://github.com/microsoft/rush-example",
+    "url": "https://github.com/mekefly/test-study-rush-version.git",
     /**
      * The default branch name. This tells "rush change" which remote branch to compare against.
      * The default value is "main"
      */
-    // "defaultBranch": "main",
+    "defaultBranch": "main",
     /**
      * The default remote. This tells "rush change" which remote to compare against if the remote URL is
      * not set or if a remote matching the provided remote URL is not found.
      */
-    // "defaultRemote": "origin"
+    "defaultRemote": "origin"
   },
 
   /**
