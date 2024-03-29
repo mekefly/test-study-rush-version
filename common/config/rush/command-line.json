@@ -11,6 +11,13 @@
    * "rush my-global-command --help".
    */
   "commands": [
+    {
+      "name": "create-version",
+      "summary": "(生成发布版本)",
+      "commandKind": "global",
+      "autoinstallerName": "standard-version",
+      "shellCommand": "standard-version"
+    }
     // {
     //   /**
     //    * (Required) Determines the type of custom command.
@@ -19,7 +26,7 @@
     //    * The set of projects can be restricted e.g. using the "--to" or "--from" parameters.
     //    */
     //   "commandKind": "bulk",
-    // 
+    //
     //   /**
     //    * (Required) The name that will be typed as part of the command line.  This is also the name
     //    * of the "scripts" hook in the project's package.json file (if "shellCommand" is not specified).
@@ -32,13 +39,13 @@
     //    * and will call the "rebuild" script instead of the "build" script.
     //    */
     //   "name": "my-bulk-command",
-    // 
+    //
     //   /**
     //    * (Required) A short summary of the custom command to be shown when printing command line
     //    * help, e.g. "rush --help".
     //    */
     //   "summary": "Example bulk custom command",
-    // 
+    //
     //   /**
     //    * A detailed description of the command to be shown when printing command line
     //    * help (e.g. "rush --help my-command").
@@ -48,7 +55,7 @@
     //    * documentation can make a big difference for the developer experience in your repo.
     //    */
     //   "description": "This is an example custom command that runs separately for each project",
-    // 
+    //
     //   /**
     //    * By default, Rush operations acquire a lock file which prevents multiple commands from executing simultaneously
     //    * in the same repo folder.  (For example, it would be a mistake to run "rush install" and "rush build" at the
@@ -58,7 +65,7 @@
     //    * In particular, this is needed for custom scripts that invoke other Rush commands.
     //    */
     //   "safeForSimultaneousRushProcesses": false,
-    // 
+    //
     //   /**
     //    * (Optional) If the `shellCommand` field is set for a bulk command, Rush will invoke it for each
     //    * selected project; otherwise, Rush will invoke the package.json `"scripts"` entry matching Rush command name.
@@ -68,14 +75,14 @@
     //    * values will be appended to the end of this string.
     //    */
     //   // "shellCommand": "node common/scripts/my-bulk-command.js",
-    // 
+    //
     //   /**
     //    * (Required) If true, then this command is safe to be run in parallel, i.e. executed
     //    * simultaneously for multiple projects.  Similar to "rush build", regardless of parallelism
     //    * projects will not start processing until their dependencies have completed processing.
     //    */
     //   "enableParallelism": false,
-    // 
+    //
     //   /**
     //    * Normally projects will be processed according to their dependency order: a given project will not start
     //    * processing the command until all of its dependencies have completed.  This restriction doesn't apply for
@@ -83,14 +90,14 @@
     //    * you can set "ignoreDependencyOrder" to true to increase parallelism.
     //    */
     //   "ignoreDependencyOrder": false,
-    // 
+    //
     //   /**
     //    * Normally Rush requires that each project's package.json has a "scripts" entry matching
     //    * the custom command name.  To disable this check, set "ignoreMissingScript" to true;
     //    * projects with a missing definition will be skipped.
     //    */
     //   "ignoreMissingScript": false,
-    // 
+    //
     //   /**
     //    * When invoking shell scripts, Rush uses a heuristic to distinguish errors from warnings:
     //    * - If the shell script returns a nonzero process exit code, Rush interprets this as "one or more errors".
@@ -112,12 +119,12 @@
     //    * Note: The default value is false. In Rush 5.7.x and earlier, the default value was true.
     //    */
     //   "allowWarningsInSuccessfulBuild": false,
-    // 
+    //
     //   /**
     //    * If true then this command will be incremental like the built-in "build" command
     //    */
     //   "incremental": false,
-    // 
+    //
     //   /**
     //    * (EXPERIMENTAL) Normally Rush terminates after the command finishes. If this option is set to "true" Rush
     //    * will instead enter a loop where it watches the file system for changes to the selected projects. Whenever a
@@ -127,39 +134,43 @@
     //    * For details, refer to the website article "Using watch mode".
     //    */
     //   "watchForChanges": false,
-    // 
+    //
     //   /**
     //    * (EXPERIMENTAL) Disable cache for this action. This may be useful if this command affects state outside of
     //    * projects' own folders.
     //    */
     //   "disableBuildCache": false
     // },
-    // 
+    //
     // {
     //   /**
     //    * (Required) Determines the type of custom command.
     //    * Rush's "global" commands are invoked once for the entire repo.
     //    */
     //   "commandKind": "global",
-    // 
+    //
     //   "name": "my-global-command",
     //   "summary": "Example global custom command",
     //   "description": "This is an example custom command that runs once for the entire repo",
-    // 
+    //
     //   "safeForSimultaneousRushProcesses": false,
-    // 
+    //
     //   /**
     //    * (Required) A script that will be invoked using the OS shell. The working directory will be
     //    * the folder that contains rush.json.  If custom parameters are associated with this command, their
     //    * values will be appended to the end of this string.
     //    */
     //   "shellCommand": "node common/scripts/my-global-command.js",
-    // 
+    //
     //   /**
     //    * If your "shellCommand" script depends on NPM packages, the recommended best practice is
     //    * to make it into a regular Rush project that builds using your normal toolchain.  In cases where
     //    * the command needs to work without first having to run "rush build", the recommended practice
     //    * is to publish the project to an NPM registry and use common/scripts/install-run.js to launch it.
+    //*如果您的“shellCommand”脚本依赖于 NPM 包，建议的最佳实践是
+    //*使其成为使用普通工具链构建的常规 Rush 项目。在以下情况下
+    //*该命令无需首先运行“rush build”即可运行，这是推荐的做法
+    //*是将项目发布到 NPM 注册表并使用 common/scripts/install-run.js 启动它。
     //    *
     //    * Autoinstallers offer another possibility: They are folders under "common/autoinstallers" with
     //    * a package.json file and shrinkwrap file. Rush will automatically invoke the package manager to
@@ -167,11 +178,21 @@
     //    * advantage that they work even in a branch where "rush install" is broken, which makes them a
     //    * good solution for Git hook scripts.  But they have the disadvantages of not being buildable
     //    * projects, and of increasing the overall installation footprint for your monorepo.
+    //*自动安装程序提供了另一种可能性：它们是“common/autoinstallers”下的文件夹
+    //*package.json 文件和收缩包装文件。 Rush 会自动调用包管理器
+    //*在调用关联命令之前安装这些依赖项。自动安装程序具有
+    //*优点是它们甚至可以在“紧急安装”被破坏的分支中工作，这使得它们成为
+    //*Git 挂钩脚本的好解决方案。但它们的缺点是不可建造
+    //*项目，并增加 monorepo 的整体安装占用空间。
     //    *
     //    * The "autoinstallerName" setting must not contain a path and must be a valid NPM package name.
     //    * For example, the name "my-task" would map to "common/autoinstallers/my-task/package.json", and
     //    * the "common/autoinstallers/my-task/node_modules/.bin" folder would be added to the shell PATH when
     //    * invoking the "shellCommand".
+    //*“autoinstallerName”设置不得包含路径，并且必须是有效的 NPM 包名称。
+    //*例如，名称“my-task”将映射到“common/autoinstallers/my-task/package.json”，并且
+    //*"common/autoinstallers/my-task/node_modules/.bin" 文件夹将被添加到 shell PATH 中
+    //*调用“shellCommand”。
     //    */
     //   // "autoinstallerName": "my-task"
     // }
@@ -188,12 +209,12 @@
     //    * A "flag" is a custom command-line parameter whose presence acts as an on/off switch.
     //    */
     //   "parameterKind": "flag",
-    // 
+    //
     //   /**
     //    * (Required) The long name of the parameter.  It must be lower-case and use dash delimiters.
     //    */
     //   "longName": "--my-flag",
-    // 
+    //
     //   /**
     //    * An optional alternative short name for the parameter.  It must be a dash followed by a single
     //    * lower-case or upper-case letter, which is case-sensitive.
@@ -204,7 +225,7 @@
     //    * a short name if you expect the parameter to be needed very often in everyday operations.
     //    */
     //   "shortName": "-m",
-    // 
+    //
     //   /**
     //    * (Required) A long description to be shown in the command-line help.
     //    *
@@ -212,14 +233,14 @@
     //    * documentation can make a big difference for the developer experience in your repo.
     //    */
     //   "description": "A custom flag parameter that is passed to the scripts that are invoked when building projects",
-    // 
+    //
     //   /**
     //    * (Required) A list of custom commands and/or built-in Rush commands that this parameter may
     //    * be used with.  The parameter will be appended to the shell command that Rush invokes.
     //    */
     //   "associatedCommands": ["build", "rebuild"]
     // },
-    // 
+    //
     // {
     //   /**
     //    * (Required) Determines the type of custom parameter.
@@ -228,17 +249,17 @@
     //   "parameterKind": "string",
     //   "longName": "--my-string",
     //   "description": "A custom string parameter for the \"my-global-command\" custom command",
-    // 
+    //
     //   "associatedCommands": ["my-global-command"],
-    // 
+    //
     //   "argumentName": "SOME_TEXT",
-    // 
+    //
     //   /**
     //    * If true, this parameter must be included with the command.  The default is false.
     //    */
     //   "required": false
     // },
-    // 
+    //
     // {
     //   /**
     //    * (Required) Determines the type of custom parameter.
@@ -248,17 +269,17 @@
     //   "parameterKind": "choice",
     //   "longName": "--my-choice",
     //   "description": "A custom choice parameter for the \"my-global-command\" custom command",
-    // 
+    //
     //   "associatedCommands": ["my-global-command"],
     //   "required": false,
-    // 
+    //
     //   /**
     //    * If a "defaultValue" is specified, then if the Rush command line is invoked without
     //    * this parameter, it will be automatically added with the "defaultValue" as the argument.
     //    * The value must be one of the defined alternatives.
     //    */
     //   "defaultValue": "vanilla",
-    // 
+    //
     //   /**
     //    * (Required) A list of alternative argument values that can be chosen for this parameter.
     //    */
@@ -269,7 +290,7 @@
     //        * e.g. "vanilla" in "--flavor vanilla".
     //        */
     //       "name": "vanilla",
-    // 
+    //
     //       /**
     //        * A detailed description for the alternative that can be shown in the command-line help.
     //        *
@@ -278,19 +299,19 @@
     //        */
     //       "description": "Use the vanilla flavor"
     //     },
-    // 
+    //
     //     {
     //       "name": "chocolate",
     //       "description": "Use the chocolate flavor"
     //     },
-    // 
+    //
     //     {
     //       "name": "strawberry",
     //       "description": "Use the strawberry flavor"
     //     }
     //   ]
     // },
-    // 
+    //
     // {
     //   /**
     //    * (Required) Determines the type of custom parameter.
@@ -299,12 +320,12 @@
     //   "parameterKind": "integer",
     //   "longName": "--my-integer",
     //   "description": "A custom integer parameter for the \"my-global-command\" custom command",
-    // 
+    //
     //   "associatedCommands": ["my-global-command"],
     //   "argumentName": "SOME_NUMBER",
     //   "required": false
     // },
-    // 
+    //
     // {
     //   /**
     //    * (Required) Determines the type of custom parameter.
@@ -319,12 +340,12 @@
     //   "parameterKind": "integerList",
     //   "longName": "--my-integer-list",
     //   "description": "A custom integer list parameter for the \"my-global-command\" custom command",
-    // 
+    //
     //   "associatedCommands": ["my-global-command"],
     //   "argumentName": "SOME_NUMBER",
     //   "required": false
     // },
-    // 
+    //
     // {
     //   /**
     //    * (Required) Determines the type of custom parameter.
@@ -339,12 +360,12 @@
     //   "parameterKind": "stringList",
     //   "longName": "--my-string-list",
     //   "description": "A custom string list parameter for the \"my-global-command\" custom command",
-    // 
+    //
     //   "associatedCommands": ["my-global-command"],
     //   "argumentName": "SOME_TEXT",
     //   "required": false
     // },
-    // 
+    //
     // {
     //   /**
     //    * (Required) Determines the type of custom parameter.
@@ -360,10 +381,10 @@
     //   "parameterKind": "choiceList",
     //   "longName": "--my-choice-list",
     //   "description": "A custom choice list parameter for the \"my-global-command\" custom command",
-    // 
+    //
     //   "associatedCommands": ["my-global-command"],
     //   "required": false,
-    // 
+    //
     //   /**
     //    * (Required) A list of alternative argument values that can be chosen for this parameter.
     //    */
@@ -374,7 +395,7 @@
     //        * e.g. "vanilla" in "--flavor vanilla".
     //        */
     //       "name": "vanilla",
-    // 
+    //
     //       /**
     //        * A detailed description for the alternative that can be shown in the command-line help.
     //        *
@@ -383,12 +404,12 @@
     //        */
     //       "description": "Use the vanilla flavor"
     //     },
-    // 
+    //
     //     {
     //       "name": "chocolate",
     //       "description": "Use the chocolate flavor"
     //     },
-    // 
+    //
     //     {
     //       "name": "strawberry",
     //       "description": "Use the strawberry flavor"

@@ -69,12 +69,18 @@
    * If you would like the version specifiers for your dependencies to be consistent, then
    * uncomment this line. This is effectively similar to running "rush check" before any
    * of the following commands:
+   * 如果您希望依赖项的版本说明符保持一致，那么
+   * 取消注释该行。这实际上类似于在任何操作之前运行“紧急检查”
+   * 以下命令：
    *
    *   rush install, rush update, rush link, rush version, rush publish
    *
    * In some cases you may want this turned on, but need to allow certain packages to use a different
    * version. In those cases, you will need to add an entry to the "allowedAlternativeVersions"
    * section of the common-versions.json.
+   *在某些情况下，您可能希望打开此功能，但需要允许某些软件包使用不同的
+   *版本。在这些情况下，您需要向“allowedAlternativeVersions”添加一个条目
+   *common-versions.json 的部分。
    */
   // "ensureConsistentVersions": true,
 
@@ -100,9 +106,30 @@
    *
    * To remove these restrictions, you could set projectFolderMinDepth=1
    * and set projectFolderMaxDepth to a large number.
+   *如果项目文件夹路径不遵循，大型 monorepos 可能会让新手感到害怕
+   *一致且可识别的模式。当系统允许嵌套文件夹树时，
+   *我们发现团队经常使用子文件夹来创建隔离岛
+   *他们从其他人那里得到的工作（“运送组织”）。这阻碍了协作和代码共享。
+   *
+   *Rush 开发人员推荐“类别文件夹”模型，其中可构建项目文件夹
+   *必须始终位于存储库根目录下恰好两层。父文件夹充当类别。
+   *这提供了对相关项目进行分组的基本设施（例如“应用程序”、“库”、
+   *“工具”、“原型”），同时仍然鼓励团队将他们的项目组织成
+   *统一的分类法。限制为 2 级一开始似乎非常严格，但如果你有
+   *20个类别，每个类别20个项目，此方案可轻松容纳数百个
+   *项目。在实践中，你会发现文件夹层次结构需要重新平衡
+   *偶尔，但如果这很痛苦，这是一个警告信号，表明您的开发风格可能会改变
+   *阻止重构。重新组织类别应该是一个富有启发性的讨论
+   *将人们聚集在一起，也许还可以识别不良的编码实践（例如文件
+   *不使用 Node.js 模块解析即可进入其他项目文件夹的引用）。
+   *
+   *默认值为projectFolderMinDepth=1 和projectFolderMaxDepth=2。
+   *
+   *要删除这些限制，您可以设置projectFolderMinDepth=1
+   *并将projectFolderMaxDepth 设置为一个较大的数字。
    */
-  // "projectFolderMinDepth": 2,
-  // "projectFolderMaxDepth": 2,
+  "projectFolderMinDepth": 2,
+  "projectFolderMaxDepth": 2,
 
   /**
    * Today the npmjs.com registry enforces fairly strict naming rules for packages, but in the early
@@ -114,6 +141,15 @@
    * the rules too much it is likely to cause very confusing malfunctions.
    *
    * The default value is false.
+   *如今，npmjs.com 注册表对包强制执行相当严格的命名规则，但在早期
+   *没有标准，也几乎没有执行的日子。一些大型遗留项目仍在使用
+   *非标准包名称，并且私有注册表有时允许它。设置“allowMostlyStandardPackageNames”
+   *改为 true 以放松 Rush 对包名称的强制。这允许大写字母，并且将来可能
+   *放宽其他规则，但我们希望尽量减少这些例外情况。许多流行的工具使用某些标点符号
+   *字符作为分隔符，基于它们永远不会出现在包名称中的假设；因此如果我们放松
+   *规则太多很可能会造成非常混乱的故障。
+   *
+   *默认值为假。
    */
   // "allowMostlyStandardPackageNames": true,
 
@@ -168,6 +204,15 @@
      *
      * IMPORTANT: Because these are regular expressions encoded as JSON string literals,
      * RegExp escapes need two backslashes, and ordinary periods should be "\\.".
+     *在大公司工作？厌倦了在工作中使用不专业的 Git 查找 Git 提交
+     *电子邮件如“beer-lover@my-college.edu”？ Rush 可以验证人们的 Git 电子邮件地址
+     *在他们开始之前。
+     *
+     *定义描述 Git 提交允许的电子邮件模式的正则表达式列表。
+     *它们是不区分大小写的锚定 JavaScript 正则表达式。示例：“.*@example\.com”
+     *
+     *重要提示：因为这些是编码为 JSON 字符串文字的正则表达式，
+     *RegExp转义需要两个反斜杠，普通句点应该是“\\.”。
      */
     // "allowedEmailRegExps": [
     //   "[^@]+@users\\.noreply\\.github\\.com",
